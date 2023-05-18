@@ -1,25 +1,451 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33414.496
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{33CE5B03-F012-46CB-AC67-04EF82A1FDD7}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{33CE5B03-F012-46CB-AC67-04EF82A1FDD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33CE5B03-F012-46CB-AC67-04EF82A1FDD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33CE5B03-F012-46CB-AC67-04EF82A1FDD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33CE5B03-F012-46CB-AC67-04EF82A1FDD7}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7DA4D743-F45B-4E74-84F5-74FD91E7E147}
-	EndGlobalSection
-EndGlobal
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HUSEYN\Documents\ParkingDB.mdf;Integrated Security=True;Connect Timeout=30");
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void fill()
+        {
+            con.Open();
+            SqlCommand com = new SqlCommand("select CarOwner,CarNum from CarRegTbl", con);
+            SqlDataReader rdr;
+            rdr = com.ExecuteReader();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("CarOwner,CarNum", typeof(string));
+            dt.Load(rdr);
+            CarOwnerCb.ValueMember = "CarOwner";
+            CarNumCb.ValueMember = "CarNum";
+            CarOwnerCb.DataSource = dt;
+            CarNumCb.DataSource = dt;
+            con.Close();
+
+
+        }
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            owners();
+            fill();
+            payments();
+            if(guna2CircleButton1.FillColor==Color.LawnGreen||guna2CircleButton2.FillColor == Color.LawnGreen||guna2CircleButton3.FillColor == Color.LawnGreen||guna2CircleButton4.FillColor == Color.LawnGreen||guna2CircleButton5.FillColor == Color.LawnGreen||guna2CircleButton6.FillColor == Color.LawnGreen||guna2CircleButton7.FillColor == Color.LawnGreen||guna2CircleButton8.FillColor == Color.LawnGreen||guna2CircleButton9.FillColor == Color.LawnGreen)
+            {
+                label11.Text = "Empty place available";
+            }
+            else
+            {
+                label11.Text = "Empty place NOT available";
+            }
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void owners()
+        {
+            con.Open();
+            string query = "select * from CarRegTbl";
+            SqlDataAdapter sda = new SqlDataAdapter(query, con);
+            var ds = new DataSet();
+            sda.Fill(ds);
+            RegDg.DataSource = ds.Tables[0];
+            con.Close();
+
+        }
+        private void payments()
+        {
+            con.Open();
+            string query = "select * from PaymentTbl";
+            SqlDataAdapter sda = new SqlDataAdapter(query, con);
+            var ds = new DataSet();
+            sda.Fill(ds);
+            RegDg2.DataSource = ds.Tables[0];
+            con.Close();
+        }
+        private void clear()
+        {
+            CarOwnerCb.Text = "";
+            CarNumCb.Text = "";
+            TotalTb.Text = "";
+            ExitTb.Text = "";
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label16_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+        double x, y, z;
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+            x = Convert.ToDouble(EntryTb.Text);
+            y = Convert.ToDouble(ExitTb.Text);
+            z = y - x;
+            if (z <= 1)
+            {
+                TotalTb.Text = "3";
+            }
+            if (z >= 1 && z <= 3)
+            {
+                TotalTb.Text = "6";
+            }
+            if(z>3 && z <= 6)
+            {
+                TotalTb.Text="8";
+            }
+            if (z > 7)
+            {
+                TotalTb.Text = "15";
+            }
+        }
+
+        private void label17_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2CircleButton1_Click(object sender, EventArgs e)
+        {
+            if(guna2CircleButton1.FillColor == Color.LawnGreen) {
+
+                guna2CircleButton1.FillColor = Color.Red;
+                pictureBox1.Visible = true;
+            
+            }
+            else
+            {
+                guna2CircleButton1.FillColor = Color.LawnGreen;
+                pictureBox1.Visible = false;
+            }
+
+        }
+
+        private void guna2CircleButton7_Click(object sender, EventArgs e)
+        {
+            if (guna2CircleButton7.FillColor == Color.LawnGreen)
+            {
+
+                guna2CircleButton7.FillColor = Color.Red;
+                pictureBox7.Visible = true;
+
+            }
+            else
+            {
+                guna2CircleButton7.FillColor = Color.LawnGreen;
+                pictureBox7.Visible = false;
+            }
+        }
+
+        private void guna2CircleButton6_Click(object sender, EventArgs e)
+        {
+            if (guna2CircleButton6.FillColor == Color.LawnGreen)
+            {
+
+                guna2CircleButton6.FillColor = Color.Red;
+                pictureBox6.Visible = true;
+
+            }
+            else
+            {
+                guna2CircleButton6.FillColor = Color.LawnGreen;
+                pictureBox6.Visible = false;
+            }
+        }
+
+        private void guna2CircleButton5_Click(object sender, EventArgs e)
+        {
+            if (guna2CircleButton5.FillColor == Color.LawnGreen)
+            {
+
+                guna2CircleButton5.FillColor = Color.Red;
+                pictureBox5.Visible = true;
+
+            }
+            else
+            {
+                guna2CircleButton5.FillColor = Color.LawnGreen;
+                pictureBox5.Visible = false;
+            }
+        }
+
+        private void guna2CircleButton4_Click(object sender, EventArgs e)
+        {
+            if (guna2CircleButton4.FillColor == Color.LawnGreen)
+            {
+
+                guna2CircleButton4.FillColor = Color.Red;
+                pictureBox4.Visible = true;
+
+            }
+            else
+            {
+                guna2CircleButton4.FillColor = Color.LawnGreen;
+                pictureBox4.Visible = false;
+            }
+        }
+
+        private void guna2CircleButton3_Click(object sender, EventArgs e)
+        {
+            if (guna2CircleButton3.FillColor == Color.LawnGreen)
+            {
+
+                guna2CircleButton3.FillColor = Color.Red;
+                pictureBox3.Visible = true;
+
+            }
+            else
+            {
+                guna2CircleButton3.FillColor = Color.LawnGreen;
+                pictureBox3.Visible = false;
+            }
+        }
+
+        private void guna2CircleButton2_Click(object sender, EventArgs e)
+        {
+            if (guna2CircleButton2.FillColor == Color.LawnGreen)
+            {
+
+                guna2CircleButton2.FillColor = Color.Red;
+                pictureBox2.Visible = true;
+
+            }
+            else
+            {
+                guna2CircleButton2.FillColor = Color.LawnGreen;
+                pictureBox2.Visible = false;
+            }
+        }
+
+        private void guna2CircleButton9_Click(object sender, EventArgs e)
+        {
+            if (guna2CircleButton9.FillColor == Color.LawnGreen)
+            {
+
+                guna2CircleButton9.FillColor = Color.Red;
+                pictureBox9.Visible = true;
+
+            }
+            else
+            {
+                guna2CircleButton9.FillColor = Color.LawnGreen;
+                pictureBox9.Visible = false;
+            }
+        }
+
+        private void guna2Button6_Click(object sender, EventArgs e)
+        {
+            if (CarOwnerTb.Text == "" || PhoneTb.Text == "" || DateTb.Text == "" || CarNumTb.Text == "" || EntryTb.Text == "")
+            {
+                MessageBox.Show("Not enough information");
+
+            }
+            else
+            {
+                try
+                {
+                    con.Open();
+                    string query = "insert into CarRegTbl values('"+CarOwnerTb.Text+"','"+PhoneTb.Text+"','"+DateTb.Text+"','"+CarNumTb.Text+"','"+EntryTb.Text+"')";
+                    SqlCommand com = new SqlCommand(query, con);
+                    com.ExecuteNonQuery();
+                    MessageBox.Show("Successfully registered !");
+                    con.Close();
+                    owners();
+                    fill();
+
+
+                }catch(Exception Ex)
+                {
+                    MessageBox.Show(Ex.Message);
+                }
+            }
+        }
+        int carkey;
+
+        private void guna2Button4_Click(object sender, EventArgs e)
+        {
+            if (CarOwnerTb.Text == "" || PhoneTb.Text == "" || DateTb.Text == "" || CarNumTb.Text == "" || EntryTb.Text == "")
+            {
+                MessageBox.Show("Enter your choice");
+
+            }
+            else
+            {
+                carkey = Convert.ToInt32(RegDg.SelectedRows[0].Cells[0].Value.ToString());
+                try
+                {
+                    con.Open();
+                    string query = "delete from CarRegTbl where CarRegId = "+carkey+"";
+                    SqlCommand com = new SqlCommand(query, con);
+                    com.ExecuteNonQuery();
+                    MessageBox.Show("Successfully deleted !");
+                    con.Close();
+                    owners();
+
+
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show(Ex.Message);
+                }
+            }
+        }
+
+        private void RegDg_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            carkey = Convert.ToInt32(RegDg.SelectedRows[0].Cells[0].Value.ToString());
+            CarOwnerTb.Text = RegDg.SelectedRows[0].Cells[1].Value.ToString();
+            PhoneTb.Text = RegDg.SelectedRows[0].Cells[2].Value.ToString();
+            DateTb.Text = RegDg.SelectedRows[0].Cells[3].Value.ToString();
+            CarNumTb.Text = RegDg.SelectedRows[0].Cells[4].Value.ToString();
+            EntryTb.Text = RegDg.SelectedRows[0].Cells[5].Value.ToString();
+            
+
+        }
+
+        private void guna2Button5_Click(object sender, EventArgs e)
+        {
+            if (CarOwnerTb.Text == "" || CarNumTb.Text == "" || TotalTb.Text == "")
+            {
+                MessageBox.Show("Not enough information");
+
+            }
+            else
+            {
+                try
+                {
+                    con.Open();
+                    string query = "insert into PaymentTbl values('" + CarOwnerCb.Text + "','" + CarNumCb.Text + "','" + TotalTb.Text + "')";
+                    SqlCommand com = new SqlCommand(query, con);
+                    com.ExecuteNonQuery();
+                    MessageBox.Show("Payment is successfull !");
+                    con.Close();
+                    payments();
+                    
+
+
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show(Ex.Message);
+                }
+            }
+        }
+
+        private void guna2Button3_Click(object sender, EventArgs e)
+        {
+            if (CarOwnerTb.Text == "" || PhoneTb.Text == "" || DateTb.Text == "" || CarNumTb.Text == "" || EntryTb.Text == "")
+            {
+                MessageBox.Show("Not enough information");
+
+            }
+            else
+            {
+                try
+                {
+                    con.Open();
+                    string query = "update CarRegTbl set CarOwner='" + CarOwnerTb.Text + "',Phone='" + PhoneTb.Text + "',Date='" + DateTb.Text + "',CarNum='" + CarNumTb.Text + "',Entry='" + EntryTb.Text + "' where CarRegId="+carkey+";";
+                    SqlCommand com = new SqlCommand(query, con);
+                    com.ExecuteNonQuery();
+                    MessageBox.Show("Successfully updated !");
+                    con.Close();
+                    owners();
+
+
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show(Ex.Message);
+                }
+            }
+        }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            CarOwnerTb.Text = "";
+            PhoneTb.Text = "";
+            DateTb.Text = "";
+            CarNumTb.Text = "";
+            EntryTb.Text="";
+
+
+        }
+    }
+}
